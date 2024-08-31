@@ -3,8 +3,6 @@
 // Question No 19 of Hands On list1
 //19.Write a program to find out time taken to execute getpid system call. Use time stamp counter.
 #include<fcntl.h>
-#include<unistd.h>
-#include<stdio.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>

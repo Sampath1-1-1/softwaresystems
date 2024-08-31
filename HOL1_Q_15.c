@@ -6,12 +6,16 @@
 #include<unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-char **environ; 
+extern  char **environ; 
+//environ: This is a special list provided by the system. It contains all the environment variables for your program.
+//This declaration tells the compiler that environ exists somewhere and will be linked during the linking stage of compilation.
 int main(void) {
     char **env = environ;  // Point to the environment variables
+    //env point to the same list of environment variables that environ points to.
 
     // Loop through each environment variable and print it
-    while (*env) {
+    while (*env) {//gets the current environment variable string from the list
+        //The loop will keep going until it reaches the end of the list of environment variables.
         printf("%s\n", *env);
         env++;
     }

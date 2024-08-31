@@ -10,16 +10,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-// Function to determine and print the file type
-void print_file_type(const char *path) {
-    struct stat file_stat;//struct stat is a structure  is used to store information about a file's attribute
-
-    // Retrieve file status
-    if (stat(~/Desktop/HANDSONLIST/hello.txt, &file_stat) != 0) {//give the path to the file
-    //stat function used to get informaiton about the file
-        perror("stat");//stat function returns 0 on success and -1 on failure.
-        return;
-    }
     // struct stat {
     // dev_t     st_dev;     // Device ID
     // ino_t     st_ino;     // Inode number
@@ -32,47 +22,39 @@ void print_file_type(const char *path) {
     // time_t    st_atime;   // Time of last access
     // time_t    st_mtime;   // Time of last modification
     // time_t    st_ctime;   // Time of last status change
-};
-
-
-    // Determine file type
-    if (S_ISREG(file_stat.st_mode)) { //S_ISREG is a macro.S_ISREG(file_stat.st_mode) evaluates to true if file_stat.st_mode indicates that the file is a regular file.
-        printf("File type: Regular file\n");
-    } 
-    else if (S_ISDIR(file_stat.st_mode)) {
-        printf("File type: Directory\n");
-    } 
-    else if (S_ISLNK(file_stat.st_mode)) {
-        printf("File type: Symbolic link\n");
-    } 
-    else if (S_ISCHR(file_stat.st_mode)) {
-        printf("File type: Character device\n");
-    }
-     else if (S_ISBLK(file_stat.st_mode)) {
-        printf("File type: Block device\n");
-    }
-     else if (S_ISFIFO(file_stat.st_mode)) {
-        printf("File type: FIFO/pipe\n");
-    }
-     else if (S_ISSOCK(file_stat.st_mode)) {
-        printf("File type: Socket\n");
-    } 
-    else {
-        printf("File type: Unknown\n");
-    }
-
 int main(int argc, char *argv[]) {
-    // Check for correct number of arguments
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s <file_path>\n", argv[0]);
-        return EXIT_FAILURE;
+        printf("Usage: %s <file_name>\n", argv[0]);
+        return 1;
     }
 
-    // Get the file path from command line argument
-    const char *file_path = argv[1];
+    struct stat file_stat;
 
-    // Print the type of the file
-    print_file_type(file_path);
+    // Get file status
+    if (stat(argv[1], &file_stat) != 0) {
+        perror("Error getting file status");
+        return 1;
+    }
 
-    return EXIT_SUCCESS;
+    // Check the type of file
+    if (S_ISREG(file_stat.st_mode)) {
+        printf("The file is a regular file.\n");
+    } else if (S_ISDIR(file_stat.st_mode)) {
+        printf("The file is a directory.\n");
+    } else if (S_ISLNK(file_stat.st_mode)) {
+        printf("The file is a symbolic link.\n");
+    } else if (S_ISCHR(file_stat.st_mode)) {
+        printf("The file is a character device.\n");
+    } else if (S_ISBLK(file_stat.st_mode)) {
+        printf("The file is a block device.\n");
+    } else if (S_ISFIFO(file_stat.st_mode)) {
+        printf("The file is a FIFO (named pipe).\n");
+    } else if (S_ISSOCK(file_stat.st_mode)) {
+        printf("The file is a socket.\n");
+    } else {
+        printf("The file type is unknown.\n");
+    }
+
+    return 0;
 }
+

@@ -9,7 +9,8 @@
 int main(){
 
     // Create a file with read/write permissions for the user (0644)
-    int fd = creat("myfile.txt", 0644);//variable fd is used to store the file descriptor returned by the creat() system call.
+    //int creat(const char *pathname, mode_t mode);
+ int fd = creat("myfile.txt", 0644);//variable fd is used to store the file descriptor returned by the creat() system call.
 // we are creating file in current working directory file name is myfile.txt
 //creat("/home/user/documents/example.txt"), the file will be created or opened at the exact location specified
     // Check if file creation was successful
@@ -18,11 +19,15 @@ int main(){
         perror("Error creating file");
         exit(EXIT_FAILURE);
     }
+//     0 is the file descriptor for standard input (stdin).
+//     1 is the file descriptor for standard output (stdout).
+//     2 is the file descriptor for standard error (stderr).
+// When a new file is created or opened, the system assigns the smallest available file descriptor that is greater than or equal to 3.
 
     // Print the file descriptor value
     printf("File descriptor: %d\n", fd);
 
     // Close the file descriptor
-    close(fd);//t ensures that any buffered data is flushed and the file is properly closed.
+    close(fd);//It effectively deallocates the file descriptor, allowing it to be assigned to another file or resource in the future.
  return 0;
 }

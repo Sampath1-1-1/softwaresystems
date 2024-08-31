@@ -24,7 +24,7 @@ int main(){
     struct stat file_stat;
 // struct stat structure is used to store information about a file, such as its size, type, and permissions
     // Get file information
-    if (stat("creatingfile.sh", &file_stat) != 0) { //stat function is used to obtain information about file.it returns 0 on success and -1 on failure
+    if (stat("hello.txt", &file_stat) != 0) { //stat function is used to obtain information about file.it returns 0 on success and -1 on failure
     //stat(path,buffer)path: A pointer to a string that specifies the file or directory path you want to query.
     //2.buffer to store file information
         perror("Error retrieving file information");
@@ -32,7 +32,7 @@ int main(){
     }
 
     // Print file attributes
-    printf("Inode: %ld\n", (long)file_stat.st_ino);
+    printf("Inode: %ld\n", (long)file_stat.st_ino);//we are typecasting to long
     printf("Number of hard links: %ld\n", (long)file_stat.st_nlink);
     printf("UID: %u\n", file_stat.st_uid);
     printf("GID: %u\n", file_stat.st_gid);

@@ -10,7 +10,7 @@
 int main() {
    // const char *filename = "example.txt";
    //int fd=open(filename,O_EXCL | O_RDWR, 0644));
-   //EITHER WE CAN USE 9,10  OR ONLY 13
+   //EITHER WE CAN USE 9,10  OR ONLY 15
     // Open the file with read-write permissions
     int  fd = open("hello.txt", O_EXCL | O_RDWR, 0644);
 //O_EXCL is specifically for creating new files and avoiding overwriting existing ones

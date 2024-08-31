@@ -13,7 +13,7 @@
 #define FILENAME "hello.txt"
 #define DATA1 "1234567890"
 #define DATA2 "ABCDEFGHIJ"
-#define BYTES_TO_WRITE 10
+#define Bytes_to_write 10
 
 int main() {
     int fd;
@@ -29,7 +29,7 @@ int main() {
     }
 
     // Write the first 10 bytes
-    if (write(fd, DATA1, BYTES_TO_WRITE) != BYTES_TO_WRITE) {//write system call is used to write data from a buffer to a file descriptor
+    if (write(fd, DATA1, Bytes_to_write) != Bytes_to_write) {//write system call is used to write data from a buffer to a file descriptor
     // The write system call uses this file descriptor to determine where to send the data.
     //successful write system call returns no of bytes it actually written.
     //     Error or Partial Write: If write does not complete writing the requested number of bytes, 
@@ -42,7 +42,7 @@ int main() {
     }
 
     // Move the file pointer by 10 bytes
-    offset = lseek(fd, BYTES_TO_WRITE, SEEK_CUR);//lseek is used to move the file pointer to a specific location within the file.
+    offset = lseek(fd, Bytes_to_write, SEEK_END);//lseek is used to move the file pointer to a specific location within the file.
     //seek_cur gives current file position
     //lseek function  returns  the new position of the file pointer.
 //Error: Returns (off_t)-1 and sets errno to indicate the error.
@@ -53,7 +53,7 @@ int main() {
     }
 
     // Write the next 10 bytes
-    if (write(fd, DATA2, BYTES_TO_WRITE) != BYTES_TO_WRITE) {
+    if (write(fd, DATA2, Bytes_to_write) != Bytes_to_write) {
         perror("write");
         close(fd);
         return 1;

@@ -6,57 +6,48 @@
 // b. hard link (link system call)
 // c. FIFO (mkfifo Library Function or mknod system call)
 
- #include<stdio.h>
-#include<sys/stat.h> //used for defining the structure and constants needed to obtain information about files.
-#include<stdlib.h> //standard library of c.decalres various utility functions for type conversions,memory allocations,algorithms
-#include<fcntl.h>   //used for file related operations
-#include<unistd.h> //it provides access for various system calls and functions
-//file descriptor is unique  integer assinged by OS when the file is opened
-int main() { 
-       //declaring the names of files
-       char *myOwnFile="MyOwnFile";
-       char *symLinkFile="symlink";
-       char *hardLinkFile="hardLinkFile";
-       char *fifoFile="Filofile";         //fileofFile is a character pointer which points to first character of the string Filofile
-       FILE *fp=fopen(myOwnFile,"w");     //fp is file pointer .fp will be used to refer to the file that is being opened.
-       //fopen is a function takes two  parameter .1.name of file to be opened .2 specifies the mode 
-       //fopen returns null when file is not opened successfully
-       if(fp==NULL){
-              perror("error is occured when creating original file");
-              return 0;
-              // If fopen succeeds, file will be a valid pointer to a FILE object
-                    }
-                                 else
-    printf("File opened successfully.\n");
-              //close the file pointer;
-              fclose(fp);
-              //int symlink(const char *target ,const char *linkpath);
-              //it will create new file like shortcut that points to target file
-           //if original file is deleted,moved,removed the symbolic link may become "broken"
-           //three errors
-           //1.EEXIST-sym link already exist;
-           //2.ENDENT-Target file not exist;
-           //3.EACCES-permision denied
-           if(symlink(myOwnFile,symLinkFile)==-1){//symlink function return -1 when symlink cannot be created
-              perror("error occurrred when creating symbolic link");
-              return 1;
-           }
-           printf("symbolic link created: %s -> %s\n",symLinkFile,myOwnFile);
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h> // For WIFEXITED and WEXITSTATUS macros
 
-           //hardlink is just a additional data entry that points to the same original file Inode
-           //both are same and sharing the same data block changes made to one file will reflect another file
-           if(link(myOwnFile,hardLinkFile)==-1){
-              perror("error occurrred when creating hardlink file");
-              return 1;
-           }
-           printf("hard link created: %s -> %s\n",hardLinkFile,myOwnFile);
-           //4.create a FIFO names pipe.it is type of IPC mechanism
-           if(mkfifo(fifoFile,666)==-1){//mkfifo function is used to create fifo pipe
-           //we giving read ,write permissons to all 
-              perror("error creating FIFO");
-              return 1;
-           }
-           printf("FIFO  created: %s\n",fifoFile);
-           return 0;
+int main() {
+    // Shell commands
+    const char *command1 = "ln -s switch.sh switch_symlink";
+    const char *command2 = "ln switch.sh switch_hardlink";
+    const char *command3 = "mkfifo switch_fifo";
 
+    // Execute shell commands
+    int ret1 = system(command1);
+    int ret2 = system(command2);
+    int ret3 = system(command3);
+
+    // Check if the commands were successful
+    if (ret1 == -1 || ret2 == -1 || ret3 == -1) {
+        perror("system call failed");
+        return 1;
+    }
+
+    // Check the exit status of the shell commands
+    if (WIFEXITED(ret1) && WEXITSTATUS(ret1) == 0) {
+        printf("Symbolic link created successfully.\n");
+    } else {
+        printf("Failed to create symbolic link.\n");
+        return 1;
+    }
+
+    if (WIFEXITED(ret2) && WEXITSTATUS(ret2) == 0) {
+        printf("Hard link created successfully.\n");
+    } else {
+        printf("Failed to create hard link.\n");
+        return 1;
+    }
+
+    if (WIFEXITED(ret3) && WEXITSTATUS(ret3) == 0) {
+        printf("FIFO created successfully.\n");
+    } else {
+        printf("Failed to create FIFO.\n");
+        return 1;
+    }
+
+    return 0;
 }

@@ -13,7 +13,7 @@ int main() {
     char line[256];    // Buffer to hold each line
 
     // Open the file in read-only mode
-    file = fopen("creatingfile.sh", "r");//It is used to open a file and return a FILE* pointer for high-level file operations.
+    file = fopen("hello.txt", "r");//It is used to open a file and return a FILE* pointer for high-level file operations.
     //open function is for low level file operations and return file descriptor
     // Check if the file was opened successfully
     if (file == NULL) {

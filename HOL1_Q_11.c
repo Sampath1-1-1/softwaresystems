@@ -28,7 +28,7 @@ int main() {
     const char *msg3 = "this message is written using dup2() fd.\n";
 
     // Open the file
-    fd = open("creatingfile.sh", O_WRONLY | O_CREAT | O_APPEND);//to open a file in append mode
+    fd = open("hello.txt", O_WRONLY | O_CREAT | O_APPEND);//to open a file in append mode
     if (fd == -1) {
         perror("open");
         return 1;

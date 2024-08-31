@@ -7,36 +7,57 @@
 #include <fcntl.h>  // For open() and flags
 #include <unistd.h> // For close() and sleep()
 #include <stdio.h>  // For perror()
+int main(){ 
+    struct flock lck;
+    // The structure typically contains the following members:
 
-#define NUM_FILES 5 // Number of files to create
+    // short l_type: Specifies the type of lock. It can be:
+    //     F_RDLCK: Read lock. Multiple processes can have a read lock on the file simultaneously.
+    //     F_WRLCK: Write lock. Only one process can have a write lock on the file, and it excludes other read or write locks.
+    //     F_UNLCK: Unlock. This removes any locks previously placed on the file.
+    // short l_whence: Specifies the reference point for l_start. It can be:
+    //     SEEK_SET: The start of the file.
+    //     SEEK_CUR: The current file offset.
+    //     SEEK_END: The end of the file.
+    // off_t l_start: The starting offset for the lock, relative to l_whence.
+    // off_t l_len: The number of bytes to lock. If l_len is 0, it locks to the end of the file.
+    // pid_t l_pid: The process ID of the process holding the lock. This is usually set by the system.
+    //This structure is used to describe a file lock, which can be used to control access to a file in a multi-process environment.
+    int fd = open("hello.txt",O_RDWR|O_CREAT,0666);
+    lck.l_type=F_RDLCK;
+    lck.l_whence=SEEK_SET;
+    lck.l_start = 0;
+    //0 indicates that the locking begins at the very first byte of the file.
+    lck.l_len = 0;
+    //l_len = 0: Lock from the starting point to the end of the file.
 
-int main() {
-    int fds[NUM_FILES]; // Array to hold file descriptors
+    //l_start = 10: The lock starts at byte 10 of the file.
+// l_len = 50: The lock extends 50 bytes from the starting point (byte 10).
 
-    // Open five new files in write-only mode
-    for (int i = 0; i < NUM_FILES; i++) {
-        // Construct file name
-        char filename[20];
-        snprintf(filename, sizeof(filename), "file%d.txt", i);
+    lck.l_pid=getpid();
+    printf("before entering the read lock\n");
+    sleep(2); 
 
-        // Open file with O_CREAT to create it if it doesn't exist
-        fds[i] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (fds[i] == -1) {
-            perror("open"); // Print an error message if open fails
-            return 1;
-        }
-    }
+    fcntl(fd, F_SETLK, &lck); 
+      //F_SETLKW is not used in read because it will 
+                                 // not make other file to aquire the lock but in read we can have multiple read lock
+                                 //&lck contains the details of the lock (start point, length, type). The F_SETLK command applies the lock immediately if possible.
 
-    // Infinite loop to keep the file descriptors open
-    while (1) {
-        sleep(10); // Sleep for 10 seconds to avoid high CPU usage
-    }
+    printf("inside read \n");
 
-    // Close file descriptors (this will never be reached due to infinite loop)
-    for (int i = 0; i < NUM_FILES; i++) {
-        close(fds[i]);
-    }
+    printf("press enter to unlock\n");
 
-    return 0;
-}
+    getchar();
 
+     lck.l_type = F_UNLCK;
+     printf("read unlocked\n");
+     fcntl(fd, F_SETLK, &lck);
+
+     close(fd);
+
+
+
+ 
+ 
+return 0; 
+} 
