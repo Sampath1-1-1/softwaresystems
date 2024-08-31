@@ -5,16 +5,14 @@
 // a. soft link (symlink system call)
 // b. hard link (link system call)
 // c. FIFO (mkfifo Library Function or mknod system call)
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h> // For WIFEXITED and WEXITSTATUS macros
 
 int main() {
     // Shell commands
-    const char *command1 = "ln -s switch.sh switch_symlink";
-    const char *command2 = "ln switch.sh switch_hardlink";
-    const char *command3 = "mkfifo switch_fifo";
+    const char *command1 = "ln -s hello.txt hello_symlink";
+    const char *command2 = "ln hello.txt hello_hardlink";
+    const char *command3 = "mkfifo hello_fifo";
 
     // Execute shell commands
     int ret1 = system(command1);
@@ -28,21 +26,21 @@ int main() {
     }
 
     // Check the exit status of the shell commands
-    if (WIFEXITED(ret1) && WEXITSTATUS(ret1) == 0) {
+    if (ret1 == 0) {
         printf("Symbolic link created successfully.\n");
     } else {
         printf("Failed to create symbolic link.\n");
         return 1;
     }
 
-    if (WIFEXITED(ret2) && WEXITSTATUS(ret2) == 0) {
+    if (ret2 == 0) {
         printf("Hard link created successfully.\n");
     } else {
         printf("Failed to create hard link.\n");
         return 1;
     }
 
-    if (WIFEXITED(ret3) && WEXITSTATUS(ret3) == 0) {
+    if (ret3 == 0) {
         printf("FIFO created successfully.\n");
     } else {
         printf("Failed to create FIFO.\n");
@@ -51,3 +49,4 @@ int main() {
 
     return 0;
 }
+
