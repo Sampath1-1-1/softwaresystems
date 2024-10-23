@@ -23,7 +23,7 @@
 
 bool login_handler(int userType, int connFD, struct Account *ptrToCustomerID,struct Employee *ptrToUserID);
 bool get_account_details(int connFD, struct Account *customerAccount);
-// bool get_customer_details(int connFD, int customerID);
+bool get_customer_details(int connFD, int customerID);
 int get_ID_INTEGER(char *readBuffer);
 bool get_transaction_details(int connFD, int accountNumber);
 // =====================================================
@@ -346,9 +346,17 @@ bool get_account_details(int connFD, struct Account *customerAccount)  // Null  
     
         accountNumber = get_ID_INTEGER(readBuffer);
     }
-    else
-        accountNumber = customerAccount->id;
+    else{
+        // write(STDOUT_FILENO,customerAccount->login,strlen(customerAccount->login));
+        bzero(readBuffer,sizeof(readBuffer));
+        strcpy(readBuffer,customerAccount->login);
+        accountNumber = get_ID_INTEGER(readBuffer);
+                bzero(readBuffer,sizeof(readBuffer));
+        // sprintf(readBuffer,"-->%d<---",accountNumber);
+        // write(STDOUT_FILENO,readBuffer,strlen(readBuffer));
 
+
+    }
     accountFileDescriptor = open(ACCOUNT_FILE, O_RDONLY);
     if (accountFileDescriptor == -1)
     {
@@ -409,12 +417,7 @@ bool get_account_details(int connFD, struct Account *customerAccount)  // Null  
     lock.l_type = F_UNLCK;
     fcntl(accountFileDescriptor, F_SETLK, &lock);
 
-    if (customerAccount != NULL)
-    {
-        *customerAccount = account;
-        return true;
-    }
-
+   
     bzero(writeBuffer, sizeof(writeBuffer));
     sprintf(writeBuffer, "Account Details - \n\tAccount Number : %d\n\tName : %s\n\tAccount Status : %s\n\tGender : %c\n\tLoginID : %s\n", account.id,account.name,(account.isActive?"Active":"Deactivated"),account.gender,account.login);
     if (account.isActive)
@@ -431,6 +434,11 @@ bool get_account_details(int connFD, struct Account *customerAccount)  // Null  
 
     writeBytes = write(connFD, writeBuffer, strlen(writeBuffer));
     readBytes = read(connFD, readBuffer, sizeof(readBuffer)); // Dummy read
+ if (customerAccount != NULL)
+    {
+        *customerAccount = account;
+        return true;
+    }
 
     return true;
 }

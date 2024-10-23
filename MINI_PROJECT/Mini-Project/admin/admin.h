@@ -115,343 +115,345 @@ bool admin_operation_handler(int connFD)
     return true;
 }
 
-// bool add_account(int connFD)
-// {
-//     ssize_t readData, writeData;
-//     char readCache[1500], writeCache[1500];
-
-//     struct Account newAccount, previousAccount;
-
-//     int accountFileDescriptor = open(ACCOUNT_FILE, O_RDONLY); //| O_CREAT, 0666
-//     if (accountFileDescriptor == -1 && errno == ENOENT)
-//     {
-//         // Account file was never created
-//         newAccount.id = 0;
-//     }
-//     else if (accountFileDescriptor == -1)
-//     {
-//         perror("Error while opening  the account file");
-//         return false;
-//     }
-//     else
-//     {
-//         int filePtr = lseek(accountFileDescriptor, -sizeof(struct Account), SEEK_END);
-//         if (filePtr == -1)
-//         {
-//             perror("Error seeking to  the last Account record!");
-//             return false;
-//         }
-
-//         struct flock lock = {F_RDLCK, SEEK_SET, filePtr, sizeof(struct Account), getpid()}; // why it is reading the lock if it is adding the  file
-//         int lockingStatus = fcntl(accountFileDescriptor, F_SETLKW, &lock);
-//         if (lockingStatus == -1)
-//         {
-//             perror("Error obtaining read lock on the  Account record!");
-//             return false;
-//         }
-
-//         readData = read(accountFileDescriptor, &previousAccount, sizeof(struct Account));
-//         if (readData == -1)
-//         {
-//             perror("Error while reading the  Account record from  the file!");
-//             return false;
-//         }
-
-//         lock.l_type = F_UNLCK;
-//         fcntl(accountFileDescriptor, F_SETLK, &lock);
-
-//         close(accountFileDescriptor);
-
-//         newAccount.id = previousAccount.id + 1;
-       
-//     }
-
-//     newAccount.isActive = true;
-//     newAccount.balance = 0;
-
-//     memset(newAccount.trancsaction, -1, MAX_TRANSACTIONS * sizeof(int));
-
-//     accountFileDescriptor = open(ACCOUNT_FILE, O_CREAT | O_APPEND | O_WRONLY, S_IRWXU);
-//     if (accountFileDescriptor == -1)
-//     {
-//         perror("Error while creating / opening the  account file!");
-//         return false;
-//     }
-//     sprintf(writeCache, "%s", ADMIN_ADD_CUSTOMER_NAME);
-
-//     writeData = write(connFD, writeCache, sizeof(writeCache));
-//     if (writeData == -1)
-//     {
-//         perror("Error writing ADMIN_ADD_CUSTOMER_NAME message to  the client!");
-//         return false;
-//     }
-
-//     readData = read(connFD, readCache, sizeof(readCache));
-//     if (readData == -1)
-//     {
-//         perror("Error reading customer name response from the  client!");
-//         return false;
-//     }
-
-//     strcpy(newAccount.name, readCache);
-//     writeData = write(connFD, ADMIN_ADD_CUSTOMER_GENDER, strlen(ADMIN_ADD_CUSTOMER_GENDER));
-//     if (writeData == -1)
-//     {
-//         perror("Error writing ADMIN_ADD_CUSTOMER_GENDER message to the  client!");
-//         return false;
-//     }
-
-//     bzero(readCache, sizeof(readCache));
-//     readData = read(connFD, readCache, sizeof(readCache));
-//     if (readData == -1)
-//     {
-//         perror("Error reading customer gender response from the  client!");
-//         return false;
-//     }
-
-//     if (readCache[0] == 'M' || readCache[0] == 'F' || readCache[0] == 'O')
-//         newAccount.gender = readCache[0];
-//     else
-//     {
-//         writeData = write(connFD, ADMIN_ADD_CUSTOMER_WRONG_GENDER, strlen(ADMIN_ADD_CUSTOMER_WRONG_GENDER));
-//         readData = read(connFD, readCache, sizeof(readCache)); // Dummy read
-//         return false;
-//     }
-
-//     bzero(writeCache, sizeof(writeCache));
-//     strcpy(writeCache, ADMIN_ADD_CUSTOMER_AGE);
-//     writeData = write(connFD, writeCache, strlen(writeCache));
-//     if (writeData == -1)
-//     {
-//         perror("Error writing ADMIN_ADD_CUSTOMER_AGE message to  the client!");
-//         return false;
-//     }
-
-//     bzero(readCache, sizeof(readCache));
-//     readData = read(connFD, readCache, sizeof(readCache));
-//     if (readData == -1)
-//     {
-//         perror("Error reading customer age response from the  client!");
-//         return false;
-//     }
-
-//     int customerAge = atoi(readCache);
-//     if (customerAge == 0)
-//     {
-//         // Either client has sent age as 0 (which is invalid) or has entered a non-numeric string
-//         bzero(writeCache, sizeof(writeCache));
-//         strcpy(writeCache, ERRON_INPUT_FOR_NUMBER);
-//         writeData = write(connFD, writeCache, strlen(writeCache));
-//         if (writeData == -1)
-//         {
-//             perror("Error while writing ERRON_INPUT_FOR_NUMBER message to  the client!");
-//             return false;
-//         }
-//         readData = read(connFD, readCache, sizeof(readCache)); // Dummy read
-//         return false;
-//     }
-//     newAccount.age = customerAge;
-
-//     //  newCustomer.account = newAccountNumber;
-
-//     strcpy(newAccount.login, newAccount.name);
-//     strcat(newAccount.login, "-");
-//     sprintf(writeCache, "%d", newAccount.id);
-//     strcat(newAccount.login, writeCache);
-
-//     char hashedPassword[1000];
-//     strcpy(hashedPassword, crypt(AUTOGEN_PASSWORD, SALT_BAE));
-//     strcpy(newAccount.password, hashedPassword);
-//     write(connFD, newAccount.login, strlen(newAccount.login));
-//     writeData = write(accountFileDescriptor, &newAccount, sizeof(struct Account));
-//     if (writeData == -1)
-//     {
-//         perror("Error while writing Account record to file!");
-//         return false;
-//     }
-
-//     close(accountFileDescriptor);
-
-//     bzero(writeCache, sizeof(writeCache));
-//     sprintf(writeCache, "%s%d", ADMIN_ADD_ACCOUNT_NUMBER, newAccount.id);
-//     strcat(writeCache, "\nRedirecting you to the main menu ...^");
-//     writeData = write(connFD, writeCache, sizeof(writeCache));
-//     readData = read(connFD, readCache, sizeof(read)); // Dummy read
-//     bzero(readCache, sizeof(readCache));
-//     return true;
-// }
-
-
-
-bool add_account(int connectionFD)
+bool add_account(int connFD)
 {
-    ssize_t bytesRead, bytesWritten;
-    char inputBuffer[1500], outputBuffer[1500];
+    ssize_t readData, writeData;
+    char readCache[1500], writeCache[1500];
 
-    struct Account newAcc, lastAcc;
+    struct Account newAccount, previousAccount;
 
-    int accFileDesc = open(ACCOUNT_FILE, O_RDONLY);
-    if (accFileDesc == -1 && errno == ENOENT)
+    int accountFileDescriptor = open(ACCOUNT_FILE, O_RDONLY); //| O_CREAT, 0666
+    if (accountFileDescriptor == -1 && errno == ENOENT)
     {
-        // If the account file doesn't exist
-        newAcc.id = 0;
+        // Account file was never created
+        newAccount.id = 0;
     }
-    else if (accFileDesc == -1)
+    else if (accountFileDescriptor == -1)
     {
-        perror("Error opening account file");
+        perror("Error while opening  the account file");
         return false;
     }
     else
     {
-        int pointerPos = lseek(accFileDesc, -sizeof(struct Account), SEEK_END);
-        if (pointerPos == -1)
+        int filePtr = lseek(accountFileDescriptor, -sizeof(struct Account), SEEK_END);
+        if (filePtr == -1)
         {
-            perror("Error seeking last account record!");
+            perror("Error seeking to  the last Account record!");
             return false;
         }
 
-        struct flock readLock = {F_RDLCK, SEEK_SET, pointerPos, sizeof(struct Account), getpid()}; // Read lock for safe access
-        int lockStatus = fcntl(accFileDesc, F_SETLKW, &readLock);
-        if (lockStatus == -1)
+        struct flock lock = {F_RDLCK, SEEK_SET, filePtr, sizeof(struct Account), getpid()}; // why it is reading the lock if it is adding the  file
+        int lockingStatus = fcntl(accountFileDescriptor, F_SETLKW, &lock);
+        if (lockingStatus == -1)
         {
-            perror("Error obtaining read lock on account record!");
+            perror("Error obtaining read lock on the  Account record!");
             return false;
         }
 
-        bytesRead = read(accFileDesc, &lastAcc, sizeof(struct Account));
-        if (bytesRead == -1)
+        readData = read(accountFileDescriptor, &previousAccount, sizeof(struct Account));
+        if (readData == -1)
         {
-            perror("Error reading account record!");
+            perror("Error while reading the  Account record from  the file!");
             return false;
         }
 
-        // Unlock after reading
-        readLock.l_type = F_UNLCK;
-        fcntl(accFileDesc, F_SETLK, &readLock);
+        lock.l_type = F_UNLCK;
+        fcntl(accountFileDescriptor, F_SETLK, &lock);
 
-        close(accFileDesc);
+        close(accountFileDescriptor);
 
-        // Increment account ID
-        newAcc.id = lastAcc.id + 1;
+        newAccount.id = previousAccount.id + 1;
+       
     }
 
-    newAcc.isActive = true;
-    newAcc.balance = 0;
-    memset(newAcc.trancsaction, -1, MAX_TRANSACTIONS * sizeof(int));
+    newAccount.isActive = true;
+    newAccount.balance = 0;
 
-    accFileDesc = open(ACCOUNT_FILE, O_CREAT | O_APPEND | O_WRONLY, S_IRWXU);
-    if (accFileDesc == -1)
+    memset(newAccount.trancsaction, -1, MAX_TRANSACTIONS * sizeof(int));
+
+    accountFileDescriptor = open(ACCOUNT_FILE, O_CREAT | O_APPEND | O_WRONLY, S_IRWXU);
+    if (accountFileDescriptor == -1)
     {
-        perror("Error creating/opening account file!");
+        perror("Error while creating / opening the  account file!");
+        return false;
+    }
+    // sprintf(writeCache, "%s", ADMIN_ADD_CUSTOMER_NAME);
+
+    writeData = write(connFD, ADMIN_ADD_CUSTOMER_NAME, sizeof(ADMIN_ADD_CUSTOMER_NAME));
+    if (writeData == -1)
+    {
+        perror("Error writing ADMIN_ADD_CUSTOMER_NAME message to  the client!");
+        return false;
+    }
+    bzero(readCache,sizeof(readCache));
+    readData = read(connFD, readCache, sizeof(readCache));
+    if (readData == -1)
+    {
+        perror("Error reading customer name response from the  client!");
+        return false;
+    }
+    write(STDOUT_FILENO,readCache,strlen(readCache));
+    strcpy(newAccount.name, readCache);
+    // read(connFD, readCache, sizeof(readCache));//dummy
+write(STDOUT_FILENO,newAccount.name,strlen(newAccount.name));
+    writeData = write(connFD, ADMIN_ADD_CUSTOMER_GENDER, strlen(ADMIN_ADD_CUSTOMER_GENDER));
+    if (writeData == -1)
+    {
+        perror("Error writing ADMIN_ADD_CUSTOMER_GENDER message to the  client!");
         return false;
     }
 
-    sprintf(outputBuffer, "%s", ADMIN_ADD_CUSTOMER_NAME);
-    bytesWritten = write(connectionFD, outputBuffer, sizeof(outputBuffer));
-    if (bytesWritten == -1)
+    bzero(readCache, sizeof(readCache));
+    readData = read(connFD, readCache, sizeof(readCache));
+    if (readData == -1)
     {
-        perror("Error writing customer name request to client!");
+        perror("Error reading customer gender response from the  client!");
         return false;
     }
 
-    bytesRead = read(connectionFD, inputBuffer, sizeof(inputBuffer));
-    if (bytesRead == -1)
-    {
-        perror("Error reading customer name response from client!");
-        return false;
-    }
-
-    strcpy(newAcc.name, inputBuffer);
-    bytesWritten = write(connectionFD, ADMIN_ADD_CUSTOMER_GENDER, strlen(ADMIN_ADD_CUSTOMER_GENDER));
-    if (bytesWritten == -1)
-    {
-        perror("Error writing gender request to client!");
-        return false;
-    }
-
-    bzero(inputBuffer, sizeof(inputBuffer));
-    bytesRead = read(connectionFD, inputBuffer, sizeof(inputBuffer));
-    if (bytesRead == -1)
-    {
-        perror("Error reading gender response from client!");
-        return false;
-    }
-
-    // Validate gender
-    if (inputBuffer[0] == 'M' || inputBuffer[0] == 'F' || inputBuffer[0] == 'O')
-        newAcc.gender = inputBuffer[0];
+    if (readCache[0] == 'M' || readCache[0] == 'F' || readCache[0] == 'O')
+        newAccount.gender = readCache[0];
     else
     {
-        bytesWritten = write(connectionFD, ADMIN_ADD_CUSTOMER_WRONG_GENDER, strlen(ADMIN_ADD_CUSTOMER_WRONG_GENDER));
-        read(connectionFD, inputBuffer, sizeof(inputBuffer)); // Dummy read
+        writeData = write(connFD, ADMIN_ADD_CUSTOMER_WRONG_GENDER, strlen(ADMIN_ADD_CUSTOMER_WRONG_GENDER));
+        readData = read(connFD, readCache, sizeof(readCache)); // Dummy read
         return false;
     }
 
-    bzero(outputBuffer, sizeof(outputBuffer));
-    strcpy(outputBuffer, ADMIN_ADD_CUSTOMER_AGE);
-    bytesWritten = write(connectionFD, outputBuffer, strlen(outputBuffer));
-    if (bytesWritten == -1)
+    bzero(writeCache, sizeof(writeCache));
+    strcpy(writeCache, ADMIN_ADD_CUSTOMER_AGE);
+    writeData = write(connFD, writeCache, strlen(writeCache));
+    if (writeData == -1)
     {
-        perror("Error writing age request to client!");
+        perror("Error writing ADMIN_ADD_CUSTOMER_AGE message to  the client!");
         return false;
     }
 
-    bzero(inputBuffer, sizeof(inputBuffer));
-    bytesRead = read(connectionFD, inputBuffer, sizeof(inputBuffer));
-    if (bytesRead == -1)
+    bzero(readCache, sizeof(readCache));
+    readData = read(connFD, readCache, sizeof(readCache));
+    if (readData == -1)
     {
-        perror("Error reading age response from client!");
+        perror("Error reading customer age response from the  client!");
         return false;
     }
 
-    int customerAge = atoi(inputBuffer);
+    int customerAge = atoi(readCache);
     if (customerAge == 0)
     {
-        // Invalid age or non-numeric input
-        bzero(outputBuffer, sizeof(outputBuffer));
-        strcpy(outputBuffer, ERRON_INPUT_FOR_NUMBER);
-        bytesWritten = write(connectionFD, outputBuffer, strlen(outputBuffer));
-        if (bytesWritten == -1)
+        // Either client has sent age as 0 (which is invalid) or has entered a non-numeric string
+        bzero(writeCache, sizeof(writeCache));
+        strcpy(writeCache, ERRON_INPUT_FOR_NUMBER);
+        writeData = write(connFD, writeCache, strlen(writeCache));
+        if (writeData == -1)
         {
-            perror("Error writing invalid input message to client!");
+            perror("Error while writing ERRON_INPUT_FOR_NUMBER message to  the client!");
             return false;
         }
-        read(connectionFD, inputBuffer, sizeof(inputBuffer)); // Dummy read
+        readData = read(connFD, readCache, sizeof(readCache)); // Dummy read
         return false;
     }
-    newAcc.age = customerAge;
+    newAccount.age = customerAge;
 
-    // Create login credentials
-    strcpy(newAcc.login, newAcc.name);
-    strcat(newAcc.login, "-");
-    sprintf(outputBuffer, "%d", newAcc.id);
-    strcat(newAcc.login, outputBuffer);
+    //  newCustomer.account = newAccountNumber;
 
-    // Hashing the password
-    char hashedPwd[1000];
-    strcpy(hashedPwd, crypt(AUTOGEN_PASSWORD, SALT_BAE));
-    strcpy(newAcc.password, hashedPwd);
+    strcpy(newAccount.login, newAccount.name);
+    strcat(newAccount.login, "-");
+    sprintf(writeCache, "%d", newAccount.id);
+    strcat(newAccount.login, writeCache);
 
-    // Sending login details to the client
-    write(connectionFD, newAcc.login, strlen(newAcc.login));
-    bytesWritten = write(accFileDesc, &newAcc, sizeof(struct Account));
-    if (bytesWritten == -1)
+    char hashedPassword[1000];
+    strcpy(hashedPassword, crypt(AUTOGEN_PASSWORD, SALT_BAE));
+    strcpy(newAccount.password, hashedPassword);
+    write(connFD, newAccount.login, strlen(newAccount.login));
+    writeData = write(accountFileDescriptor, &newAccount, sizeof(struct Account));
+    if (writeData == -1)
     {
-        perror("Error writing account record to file!");
+        perror("Error while writing Account record to file!");
         return false;
     }
 
-    close(accFileDesc);
+    close(accountFileDescriptor);
 
-    bzero(outputBuffer, sizeof(outputBuffer));
-    sprintf(outputBuffer, "%s%d", ADMIN_ADD_ACCOUNT_NUMBER, newAcc.id);
-    strcat(outputBuffer, "\nRedirecting to main menu...");
-    write(connectionFD, outputBuffer, sizeof(outputBuffer));
-    read(connectionFD, inputBuffer, sizeof(inputBuffer)); // Dummy read
-    bzero(inputBuffer, sizeof(inputBuffer));
-
+    bzero(writeCache, sizeof(writeCache));
+    sprintf(writeCache, "%s%d", ADMIN_ADD_ACCOUNT_NUMBER, newAccount.id);
+    strcat(writeCache, "\nRedirecting you to the main menu ...^");
+    writeData = write(connFD, writeCache, sizeof(writeCache));
+    readData = read(connFD, readCache, sizeof(read)); // Dummy read
+    bzero(readCache, sizeof(readCache));
     return true;
 }
+
+
+
+// bool add_account(int connectionFD)
+// {
+//     ssize_t bytesRead, bytesWritten;
+//     char inputBuffer[1500], outputBuffer[1500];
+
+//     struct Account newAcc, lastAcc;
+
+//     int accFileDesc = open(ACCOUNT_FILE, O_RDONLY);
+//     if (accFileDesc == -1 && errno == ENOENT)
+//     {
+//         // If the account file doesn't exist
+//         newAcc.id = 0;
+//     }
+//     else if (accFileDesc == -1)
+//     {
+//         perror("Error opening account file");
+//         return false;
+//     }
+//     else
+//     {
+//         int pointerPos = lseek(accFileDesc, -sizeof(struct Account), SEEK_END);
+//         if (pointerPos == -1)
+//         {
+//             perror("Error seeking last account record!");
+//             return false;
+//         }
+
+//         struct flock readLock = {F_RDLCK, SEEK_SET, pointerPos, sizeof(struct Account), getpid()}; // Read lock for safe access
+//         int lockStatus = fcntl(accFileDesc, F_SETLKW, &readLock);
+//         if (lockStatus == -1)
+//         {
+//             perror("Error obtaining read lock on account record!");
+//             return false;
+//         }
+
+//         bytesRead = read(accFileDesc, &lastAcc, sizeof(struct Account));
+//         if (bytesRead == -1)
+//         {
+//             perror("Error reading account record!");
+//             return false;
+//         }
+
+//         // Unlock after reading
+//         readLock.l_type = F_UNLCK;
+//         fcntl(accFileDesc, F_SETLK, &readLock);
+
+//         close(accFileDesc);
+
+//         // Increment account ID
+//         newAcc.id = lastAcc.id + 1;
+//     }
+
+//     newAcc.isActive = true;
+//     newAcc.balance = 0;
+//     memset(newAcc.trancsaction, -1, MAX_TRANSACTIONS * sizeof(int));
+
+//     accFileDesc = open(ACCOUNT_FILE, O_CREAT | O_APPEND | O_WRONLY, S_IRWXU);
+//     if (accFileDesc == -1)
+//     {
+//         perror("Error creating/opening account file!");
+//         return false;
+//     }
+
+//     sprintf(outputBuffer, "%s", ADMIN_ADD_CUSTOMER_NAME);
+//     bytesWritten = write(connectionFD, outputBuffer, sizeof(outputBuffer));
+//     if (bytesWritten == -1)
+//     {
+//         perror("Error writing customer name request to client!");
+//         return false;
+//     }
+
+//     bytesRead = read(connectionFD, inputBuffer, sizeof(inputBuffer));
+//     if (bytesRead == -1)
+//     {
+//         perror("Error reading customer name response from client!");
+//         return false;
+//     }
+
+//     strcpy(newAcc.name, inputBuffer);
+//     bytesWritten = write(connectionFD, ADMIN_ADD_CUSTOMER_GENDER, strlen(ADMIN_ADD_CUSTOMER_GENDER));
+//     if (bytesWritten == -1)
+//     {
+//         perror("Error writing gender request to client!");
+//         return false;
+//     }
+
+//     bzero(inputBuffer, sizeof(inputBuffer));
+//     bytesRead = read(connectionFD, inputBuffer, sizeof(inputBuffer));
+//     if (bytesRead == -1)
+//     {
+//         perror("Error reading gender response from client!");
+//         return false;
+//     }
+
+//     // Validate gender
+//     if (inputBuffer[0] == 'M' || inputBuffer[0] == 'F' || inputBuffer[0] == 'O')
+//         newAcc.gender = inputBuffer[0];
+//     else
+//     {
+//         bytesWritten = write(connectionFD, ADMIN_ADD_CUSTOMER_WRONG_GENDER, strlen(ADMIN_ADD_CUSTOMER_WRONG_GENDER));
+//         read(connectionFD, inputBuffer, sizeof(inputBuffer)); // Dummy read
+//         return false;
+//     }
+
+//     bzero(outputBuffer, sizeof(outputBuffer));
+//     strcpy(outputBuffer, ADMIN_ADD_CUSTOMER_AGE);
+//     bytesWritten = write(connectionFD, outputBuffer, strlen(outputBuffer));
+//     if (bytesWritten == -1)
+//     {
+//         perror("Error writing age request to client!");
+//         return false;
+//     }
+
+//     bzero(inputBuffer, sizeof(inputBuffer));
+//     bytesRead = read(connectionFD, inputBuffer, sizeof(inputBuffer));
+//     if (bytesRead == -1)
+//     {
+//         perror("Error reading age response from client!");
+//         return false;
+//     }
+
+//     int customerAge = atoi(inputBuffer);
+//     if (customerAge == 0)
+//     {
+//         // Invalid age or non-numeric input
+//         bzero(outputBuffer, sizeof(outputBuffer));
+//         strcpy(outputBuffer, ERRON_INPUT_FOR_NUMBER);
+//         bytesWritten = write(connectionFD, outputBuffer, strlen(outputBuffer));
+//         if (bytesWritten == -1)
+//         {
+//             perror("Error writing invalid input message to client!");
+//             return false;
+//         }
+//         read(connectionFD, inputBuffer, sizeof(inputBuffer)); // Dummy read
+//         return false;
+//     }
+//     newAcc.age = customerAge;
+
+//     // Create login credentials
+//     strcpy(newAcc.login, newAcc.name);
+//     strcat(newAcc.login, "-");
+//     sprintf(outputBuffer, "%d", newAcc.id);
+//     strcat(newAcc.login, outputBuffer);
+
+//     // Hashing the password
+//     char hashedPwd[1000];
+//     strcpy(hashedPwd, crypt(AUTOGEN_PASSWORD, SALT_BAE));
+//     strcpy(newAcc.password, hashedPwd);
+
+//     // Sending login details to the client
+//     write(connectionFD, newAcc.login, strlen(newAcc.login));
+//     bytesWritten = write(accFileDesc, &newAcc, sizeof(struct Account));
+//     if (bytesWritten == -1)
+//     {
+//         perror("Error writing account record to file!");
+//         return false;
+//     }
+
+//     close(accFileDesc);
+
+//     bzero(outputBuffer, sizeof(outputBuffer));
+//     sprintf(outputBuffer, "%s%d", ADMIN_ADD_ACCOUNT_NUMBER, newAcc.id);
+//     strcat(outputBuffer, "\nRedirecting to main menu...");
+//     write(connectionFD, outputBuffer, sizeof(outputBuffer));
+//     read(connectionFD, inputBuffer, sizeof(inputBuffer)); // Dummy read
+//     bzero(inputBuffer, sizeof(inputBuffer));
+
+//     return true;
+// }
 
 
 bool deactivate_account(int connFD)
@@ -618,7 +620,7 @@ bool modify_customer_info(int connFD)
         return false;
     }
 
-    customerID = atoi(readCache);
+    customerID = get_ID_INTEGER(readCache);
 
     int customerFileDescriptor = open(ACCOUNT_FILE, O_RDONLY);
     if (customerFileDescriptor == -1)

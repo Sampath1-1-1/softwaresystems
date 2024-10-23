@@ -53,7 +53,7 @@
 
 // ADMIN MENU
 #define ADMIN_MENU "\t1.\tAdd new Customer\n\t2\tModify customer details \n\t3.\tGet customer details \n\t4.\tGet transation details \n\t5.\tDeactivate customer account \n\t6.\tAdding new employee  \n\t7.\tModify employee information\n\t8.\tGet Employee details \n\t9.\tChange Manager roles\n\t10\tChange Admin password \n\tPress any other key to logout\n\t"
-#define EMPLOYEE_MENU "\t1.\tAdd new Customer\n\t2.\tget account details\n\t3.accept_reject_loan_applications\t \n\t4.\tModify customer details \n\t5.process Loan Applications \n\t7.\t View Assigned Loan applications\n\t8.view Customer Transactions \n\t 9.change password\n\tPress any other key to logout\n\t"
+#define EMPLOYEE_MENU "\t1.\tAdd new Customer\n\t2.\tModify customer details\n\t3.accept_reject_loan_applications\t \n\t4.get accpunt details\t \n\t5.process Loan Applications \n\t7.\t View Assigned Loan applications\n\t8.view Customer Transactions \n\t 9.change password\n\tPress any other key to logout\n\t"
 #define MANAGER_MENU "\t1.Activate/Deactivate Customer Accounts\n\t2.\tAssign Loan Application Processes to Employees\n\t3.Review Customer Feedback\t \n\t4.\tChange Password  \n\t Press any other key to logout\n\t"
 // ADD CUSTOMER
 

@@ -92,7 +92,7 @@ bool customer_operation_handler(int connFD)
             switch (choice)
             {
             case 1:
-                // get_customer_details(connFD, loggedInCustomer.id);
+                get_account_details(connFD, &loggedInCustomer);
                 break;
             case 2:
                 deposit(connFD);
