@@ -32,7 +32,7 @@ int main() {
     timer.it_interval.tv_usec = 0;
 
     setitimer(ITIMER_PROF, &timer, NULL);
-
+//This signal can be used to measure the time a program spends both in user mode and system mode (kernel mode).
     printf("Waiting for SIGPROF (Setitimer). It will trigger in 5 seconds...\n");
   while(1); // Wait for signals
 

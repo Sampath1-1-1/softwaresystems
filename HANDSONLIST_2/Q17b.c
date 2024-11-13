@@ -24,6 +24,11 @@ int main() {
         dup2(pipefd[1], STDOUT_FILENO);  // Redirect stdout to the write end of the pipe
         close(pipefd[1]);                // Close the original write end
         execlp("ls", "ls", "-l", NULL);   // Execute `ls -l`
+    //     dup2(pipefd[1], STDOUT_FILENO):
+
+    // It closes the file descriptor STDOUT_FILENO if it is open.
+    // Then, it duplicates pipefd[1] and assigns the duplicate to STDOUT_FILENO.
+    // After this, any output that would normally go to the terminal (standard output) will instead be sent to the pipe
     } else {
         // Parent process - executes `wc`
         close(pipefd[1]);                // Close the write end of the pipe

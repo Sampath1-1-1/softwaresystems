@@ -65,7 +65,8 @@ int main() {
     printf("Maximum Number of Bytes Allowed: %ld\n", queue_info.msg_qbytes);
     printf("PID of Last Message Sent: %d\n", queue_info.msg_lspid);
     printf("PID of Last Message Received: %d\n", queue_info.msg_lrpid);
-
+printf("Key: %d\n", key);
+    printf("Message Queue ID: %d\n", msgid);
     return 0;
 }
 // struct msqid_ds {

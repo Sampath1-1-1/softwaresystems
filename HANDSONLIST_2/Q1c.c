@@ -29,6 +29,7 @@ int main() {
 
     // Start the timer (ITIMER_PROF)
     setitimer(ITIMER_PROF, &timer, NULL);
+    // the setitimer function is used to schedule the delivery of a signal at some point in the future, based on timers.
 
     // Do some busy work
     while (1) {

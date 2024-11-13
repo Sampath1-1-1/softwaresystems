@@ -24,6 +24,8 @@ int main() {
     for(int i = 0; i < 3; i++) {
         thread_args[i] = i + 1; // Assign a thread number (1, 2, 3)
         pthread_create(&threads[i], NULL, thread_function, &thread_args[i]);
+       printf("Thread ID: %lu\n", (unsigned long)pthread_self());
+    //    Use pthread_self(): This function returns the thread ID of the calling thread.
         //int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);
 //attr: A pointer to a pthread_attr_t structure that specifies thread attributes. If NULL, default attributes are used.
 // 3rd argument pointer to the function that the thread will execute. This function must have the form void *(*start_routine)(void *).

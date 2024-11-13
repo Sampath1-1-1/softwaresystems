@@ -18,14 +18,14 @@ int main(void){
 	fd = open("my_fifo3", O_RDONLY);
 	FD_ZERO(&rfds);
 	FD_SET(fd, &rfds);
-	tv.tv_sec=5;
+	tv.tv_sec=10;
 	tv.tv_usec=0;
 	retval=select(fd+1, &rfds, NULL, NULL, &tv);
 	if(retval){
 		printf(" Data is available now...\n");
 	}
 	else{
-		printf(" No data is available within 5 seconds...\n");
+		printf(" No data is available within 10 seconds...\n");
 		exit(0);
 	}
 	read(fd, buff, sizeof(buff));

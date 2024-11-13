@@ -91,7 +91,7 @@ int main() {
         printf("Parent (PID: %d) is running. Child (PID: %d) created.\n", getpid(), pid);
         
         // Parent process sleeps for 3 seconds
-        sleep(3);
+        // sleep(3);
         printf("Parent (PID: %d) is terminating.\n", getpid());
         
         // Parent process will terminate here

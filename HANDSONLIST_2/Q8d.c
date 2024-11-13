@@ -24,7 +24,7 @@ int main() {
     // Set up signal handler
     signal(SIGALRM, handle_sigalrm);
 
-    // Set an alarm to trigger SIGALRM after 3 seconds
+    // Set an alarm to trigger SIGALRM after 5 seconds
     alarm(5);
     //unsigned int alarm(unsigned int seconds);
 // After 5 seconds, the operating system will send a SIGALRM signal to the process

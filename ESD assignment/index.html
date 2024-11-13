@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marco Restaurant</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color:light-gray;
+        }
+        header {  
+            position: relative;
+        }
+        .header-image {
+            width: 100%;
+            height: 100%;
+            display: block; 
+            padding:0;
+            margin:0;
+        }
+        .login-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color:blue;
+            color:white;
+            font-weight: bold;
+            padding: 10px 20px;
+             border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* transition: background-color 0.3s; */
+        }
+        .login-btn:hover {
+            background-color:blue;
+        }
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 100px 25px 100px 25px;
+        }
+        .product-card {
+            margin: 10px;
+            width: 300px;
+            text-align: center;
+            background-color: yellow;
+            border: 2px solid yellow;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            position: relative;
+        }
+        .card-img-top {
+            height:200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+        .product-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .product-price {
+    color: #000000;  /* Dark black color */
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+        .product-rating {
+            color: white;
+            background-color: rgb(165, 50, 42) ;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .add-to-cart-btn {
+                background-color: #c218a0;
+                 color: #fff;
+                font-weight: bold;
+                width: 50%;
+                padding: 10px 0;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+                 margin-left: 50px; /* Adjusts the button's position slightly to the right */
+}
+
+        /* .add-to-cart-btn:hover {
+            background-color: #8e004a;
+        } */
+        .button-rating-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .class_food-desc {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="text-center my-4">
+        <h1>Welcome to Our E-Commerce Site</h1>
+        <img src="front1.png" alt="Front Page Image" class="img-fluid header-image">
+        <a href="login.html" class="btn login-btn">Login</a>
+    </header>
+
+    <!-- Product Cards -->
+    <div class="row flex-container">
+        <div class="col-lg-6 col-md-6 card product-card">
+            <img src="dosa.jpg" class="card-img-top" alt="Dosa">
+            <h5 class="product-title">Masala Dosa</h5>
+            <p class="product-price">₹60</p>
+            <div class="col-lg-6 col-md-6 card "> <p class="class_food-desc"> Crispy golden crepe filled with spiced potatoes, served with chutney and sambar..</p>
+            </div>
+                <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.5)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="manchuri.jpg" class="card-img-top" alt="Manchurian">
+            <h5 class="product-title">Manchurian</h5>
+            <p class="product-price">₹100</p>
+            <p class="class_food-desc"> Spicy vegetable dumplings in a rich Indo-Chinese sauce.</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.2)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="idli.jpg" class="card-img-top" alt="Idli">
+            <h5 class="product-title">Steamed Idli</h5>
+            <p class="product-price">₹40</p>
+            <p class="class_food-desc">Soft, fluffy steamed rice cakes with chutney on the side.</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (5.0)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="Bolognese.jpg" class="card-img-top" alt="Bolognese">
+            <h5 class="product-title">Bolognese</h5>
+            <p class="product-price">₹229</p>
+            <p class="class_food-desc">Savory pasta with a rich, spiced tomato sauce and paneer.</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.0)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="Burgercombo.jpg" class="card-img-top" alt="Burger Combo">
+            <h5 class="product-title">Burger Combo</h5>
+            <p class="product-price">₹359</p>
+            <p class="class_food-desc">Juicy burger with fries, served with condiments..</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.3)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="hakka noodles.jpg" class="card-img-top" alt="Hakka Noodles">
+            <h5 class="product-title">Hakka Noodles</h5>
+            <p class="product-price">₹140</p>
+            <p class="class_food-desc">Stir-fried noodles with mixed vegetables and spices..</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.1)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="Specialpizza.jpg" class="card-img-top" alt="Special Pizza">
+            <h5 class="product-title">Special Pizza</h5>
+            <p class="product-price">₹229</p>
+            <p class="class_food-desc">Thin-crust pizza with assorted vegetables and cheese..</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.8)</span>
+            </div>
+        </div>
+
+        <div class="card product-card">
+            <img src="samosa.jpg" class="card-img-top" alt="Samosa">
+            <h5 class="product-title">Samosa</h5>
+            <p class="product-price">₹60</p>
+            <p class="class_food-desc">Crispy pastry filled with spiced potatoes.</p>
+            <div class="button-rating-container">
+                <a href="#" class="btn add-to-cart-btn">Add to Cart</a>
+                <span class="product-rating">⭐ (4.3)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

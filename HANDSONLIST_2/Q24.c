@@ -12,7 +12,7 @@ int main() {
     int msgid;
 
     // Generate a unique key for the message queue
-    key = ftok("creatingfile.sh", 15); 
+    key = ftok("creatingfile.sh", 115); 
     //The project identifier is limited to the range 0 to 255, as it’s represented by an unsigned char.
     //ftok() combines the file’s inode number and the project identifier to generate a unique key. The resulting key is used to identify IPC resources.
     if (key == -1) {
